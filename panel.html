@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Abstract Panel</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container" id='panel'>
+        <p class="lead">Selected items: <b>{{ SelectedItems }}</b>- Total items: <b>{{ TotalItems }}</b></p>
+
+
+        <!-- <div><img v-on:click="counter += 1" src="on.svg" onclick="javascript:this.src.substring(this.src.length-6)=='on.svg' ? this.src='off.svg' : this.src='on.svg'">
+        </div>
+        <div><img v-on:click="counter += 1" src="on.svg" onclick="javascript:this.src.substring(this.src.length-6)=='on.svg' ? this.src='off.svg' : this.src='on.svg'">
+        </div> -->
+
+        <!-- <div><img :src="itemList[0].image" v-on:click="toggleItem"></div>
+        <div><img :src="itemList[0].image" v-on:click="toggleItem"></div> -->
+
+        <!-- <div>
+            <div><img :src="icons.on" v-on:click="toggleItem"></div>
+            <div><img :src="icons.on" v-on:click="toggleItem"></div>
+        </div> -->
+
+        <div>
+            <stock-item v-for="item in itemList" v-bind:stock="item" v-bind:key="item.id">
+            </stock-item>
+        </div>
+
+
+        <div>
+            <input type="hidden" name="SelectedItems" v-bind:value="SelectedItems">
+            <input type="hidden" name="TotalItems" v-bind:value="TotalItems">
+            <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        <br />
+    </div>
+    <!-- Optional JavaScript -->
+
+    <!-- Configuration -->
+    <script src="panel.js"></script>
+
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        // get values from panel.js
+        Vue.prototype.icons = config.icons
+        Vue.prototype.quantity = config.itemList.length
+        Vue.prototype.itemList = config.itemList
+
+        // components
+
+        Vue.component('stock-item', {
+            // The todo-item component now accepts a
+            // "prop", which is like a custom attribute.
+            // This prop is called todo.
+            props: ['stock'],
+            template: '<div><img :src="icons.on" v-on:click="alert()"></div>'
+        })
+
+
+        new Vue({
+            el: '#panel',
+            data: {
+                counter: 0
+            },
+            computed: {
+                SelectedItems: function () {
+                    return this.counter
+                },
+                TotalItems: function () {
+                    return (this.quantity - this.counter)
+                }
+            },
+            methods: {
+                // toggle item
+                toggleItem: function (event) {
+                    // this.counter += 1
+                    if (event) {
+
+                        // alert(event.target.src.substring(event.target.src.length-7))
+                        // alert(event.target.src)
+                        // alert(this.itemList[0].image)
+                        // event.target.src.substring(event.target.src.length-6)=='on.svg' ? event.target.src='off.svg': event.target.src='on.svg' 
+
+                        // if (event.target.src.substring(event.target.src.length - this.itemList[0].image.length) ==
+                        //     this.itemList[0].image) {
+                        //     event.target.src = this.itemList[1].image;
+                        //     this.counter += 1
+                        // } else {
+                        //     event.target.src = this.itemList[0].image;
+                        //     this.counter -= 1
+                        // }
+
+                        if (event.target.src.substring(event.target.src.length - this.icons.on.length) ==
+                            this.icons.on) {
+                            event.target.src = this.icons.off;
+                            this.counter += 1
+                        } else {
+                            event.target.src = this.icons.on;
+                            this.counter -= 1
+                        }
+
+
+                        // var icon = event.target.src.substring(event.target.src.length-6)
+                        // event.target.src.substring(event.target.src.length-7)=='on.svg' ? alert(icon) : alert(icon)
+                    }
+                },
+                // call webhook              
+                httpCall: function (event) {
+
+                    webhook = "/"
+                    window.open(webhook, "new")
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
