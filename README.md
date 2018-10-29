@@ -1,2 +1,2 @@
 # AbstractInterface
-A interactive SVG web interface
+An interactive SVG web interface using vue.js
