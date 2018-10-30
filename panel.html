@@ -15,7 +15,7 @@
 
 <body>
     <div class="container" id='panel'>
-        <p class="lead">Selected items: <b>{{ SelectedItems }}</b>- Total items: <b>{{ TotalItems }}</b></p>
+        <p class="lead">Selected items: <b>{{ SelectedItems }}</b> - Total items: <b>{{ TotalItems }}</b></p>
 
 
         <!-- <div><img v-on:click="counter += 1" src="on.svg" onclick="javascript:this.src.substring(this.src.length-6)=='on.svg' ? this.src='off.svg' : this.src='on.svg'">
@@ -57,15 +57,29 @@
         Vue.prototype.icons = config.icons
         Vue.prototype.quantity = config.itemList.length
         Vue.prototype.itemList = config.itemList
+        Vue.prototype.counter = 0
 
         // components
 
-        Vue.component('stock-item', {
-            // The todo-item component now accepts a
-            // "prop", which is like a custom attribute.
-            // This prop is called todo.
+        Vue.component('stock-item', {            
             props: ['stock'],
-            template: '<div><img :src="icons.on" v-on:click="alert()"></div>'
+            template: '<div><img :src="icons.on" v-on:click="toggle"></div>',           
+            methods: {
+                toggle: function (event) {
+                    if (event) {
+                        if (event.target.src.substring(event.target.src.length - this.icons.on.length) ==
+                            this.icons.on) {
+                            event.target.src = this.icons.off;
+                            this.counter += 1;                                                      
+                        } else {
+                            event.target.src = this.icons.on;
+                            this.counter -= 1
+                        }
+
+                    }
+                }
+
+            }
         })
 
 
@@ -82,43 +96,9 @@
                     return (this.quantity - this.counter)
                 }
             },
-            methods: {
-                // toggle item
-                toggleItem: function (event) {
-                    // this.counter += 1
-                    if (event) {
-
-                        // alert(event.target.src.substring(event.target.src.length-7))
-                        // alert(event.target.src)
-                        // alert(this.itemList[0].image)
-                        // event.target.src.substring(event.target.src.length-6)=='on.svg' ? event.target.src='off.svg': event.target.src='on.svg' 
-
-                        // if (event.target.src.substring(event.target.src.length - this.itemList[0].image.length) ==
-                        //     this.itemList[0].image) {
-                        //     event.target.src = this.itemList[1].image;
-                        //     this.counter += 1
-                        // } else {
-                        //     event.target.src = this.itemList[0].image;
-                        //     this.counter -= 1
-                        // }
-
-                        if (event.target.src.substring(event.target.src.length - this.icons.on.length) ==
-                            this.icons.on) {
-                            event.target.src = this.icons.off;
-                            this.counter += 1
-                        } else {
-                            event.target.src = this.icons.on;
-                            this.counter -= 1
-                        }
-
-
-                        // var icon = event.target.src.substring(event.target.src.length-6)
-                        // event.target.src.substring(event.target.src.length-7)=='on.svg' ? alert(icon) : alert(icon)
-                    }
-                },
+            methods: {               
                 // call webhook              
                 httpCall: function (event) {
-
                     webhook = "/"
                     window.open(webhook, "new")
 
