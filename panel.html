@@ -15,7 +15,7 @@
 
 <body>
     <div class="container" id='panel'>
-        <p class="lead">Selected items: <b>{{ SelectedItems }}</b> - Total items: <b>{{ TotalItems }}</b></p>
+        <p class="lead">Selected items: <b id="Select">0</b> - Total items: <b>{{ TotalItems }}</b></p>
 
 
         <!-- <div><img v-on:click="counter += 1" src="on.svg" onclick="javascript:this.src.substring(this.src.length-6)=='on.svg' ? this.src='off.svg' : this.src='on.svg'">
@@ -57,23 +57,27 @@
         Vue.prototype.icons = config.icons
         Vue.prototype.quantity = config.itemList.length
         Vue.prototype.itemList = config.itemList
-        Vue.prototype.counter = 0
+        Vue.prototype.checkedNames = []
 
         // components
 
-        Vue.component('stock-item', {            
+        Vue.component('stock-item', {                                 
             props: ['stock'],
-            template: '<div><img :src="icons.on" v-on:click="toggle"></div>',           
+            template: '<div><img :src="icons.on" v-on:click="toggle"></div>',
             methods: {
                 toggle: function (event) {
                     if (event) {
                         if (event.target.src.substring(event.target.src.length - this.icons.on.length) ==
                             this.icons.on) {
                             event.target.src = this.icons.off;
-                            this.counter += 1;                                                      
+                            // this.counter += 1;
+                            // this.counter++; 
+                            this.checkedNames.push("item");                            
+                            document.getElementById("Select").innerHTML = this.checkedNames.length;
                         } else {
                             event.target.src = this.icons.on;
-                            this.counter -= 1
+                            // this.counter -= 1;
+                            // this.counter--; 
                         }
 
                     }
@@ -85,18 +89,18 @@
 
         new Vue({
             el: '#panel',
-            data: {
-                counter: 0
-            },
+           
             computed: {
                 SelectedItems: function () {
-                    return this.counter
+                    return this.checkedNames.length
                 },
                 TotalItems: function () {
-                    return (this.quantity - this.counter)
+                    // return (this.quantity - this.counter)
+                    return (this.quantity - this.checkedNames.length)
+                    // return this.quantity
                 }
             },
-            methods: {               
+            methods: {
                 // call webhook              
                 httpCall: function (event) {
                     webhook = "/"
